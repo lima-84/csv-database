@@ -7,6 +7,7 @@
 from numpy import loadtxt, savetxt, concatenate
 from numpy.random import rand, randn
 from scipy.signal import lfilter
+from os.path import exists
 
 __all__ = ['load_data', 'save_data', 'gen_data']
 
@@ -33,7 +34,7 @@ def gen_data(Ao, Bo, N):
     # Replicates the following experiment:
     # y(t) = Go(q)*u(t) + Ho(q)*e(t),
     # where u(t) is the system input and e(t) white noise
-    u = -1 + 2*rand(N, 1)   # Defines input signal
+    u = -10 + 10*randn(N, 1) # Defines input signal
     e = 0.01*randn(N, 1)    # Emulates gaussian white noise with std = 0.01
 
     # Calculates the y ARX: G(q) = B(q)/A(q) and H(q) = 1/A(q)
@@ -67,6 +68,7 @@ def load_data(filename, delim=",", skip_rows=1):
         return data
     except:
         print("csv_data.py::load_data -- Error loading data.")
+        raise OSError("File not found.")
 
 def save_data(data, filename="data.csv", delim=",", hdr="Input, Output"):
     """
